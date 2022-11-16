@@ -1,6 +1,11 @@
-package Main
+import ui.worker.{ConsoleWorker, Worker}
 
-object Main extends App {
+object Main {
 
-  // call worker
+  val worker: Worker = new ConsoleWorker
+
+  def main(args: Array[String]): Unit = {
+
+    worker.work(args.toList)
+  }
 }
