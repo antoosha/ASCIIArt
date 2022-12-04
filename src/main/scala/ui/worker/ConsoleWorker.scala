@@ -2,8 +2,8 @@ package ui.worker
 
 import business.exporters.image.console.ConsoleASCIIImageExporter
 import business.exporters.image.file.TxtFileASCIIImageExporter
-import business.loaders.image.file.{JPGImageLoader, PNGImageLoader}
 import business.loaders.image.RandomImageLoader
+import business.loaders.image.file.{JPGImageLoader, PNGImageLoader}
 import models.Argument
 import models.images.{ASCIIImage, Image}
 import ui.parser.{ConsoleParser, Parser}
@@ -54,7 +54,7 @@ class ConsoleWorker extends Worker {
         }
         case "--output-file" => {
           if (command.getValue.get.contains(".txt")) {
-            txtFileASCIIImageExporter.export(convertedImage.get, command.getValue)
+            txtFileASCIIImageExporter.export(convertedImage.get, command.getValue.get)
           } else {
             throw new IllegalStateException(s"It is not possible to export to file ${command.getText} because of it's format. "
               + s"Only .txt format is possible.")
@@ -73,7 +73,7 @@ class ConsoleWorker extends Worker {
           loadedImage = Some(randomImageLoader.load(None))
         }
         case "--output-console" => {
-          consoleASCIIImageExporter.export(convertedImage.get, None)
+          consoleASCIIImageExporter.export(convertedImage.get, Console.out)
         }
         case _ => throw new IllegalStateException(s"Something went wrong with ${command.getText} command.")
       }
