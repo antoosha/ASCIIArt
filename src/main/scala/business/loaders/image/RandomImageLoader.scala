@@ -1,15 +1,13 @@
 package business.loaders.image
 
-import models.grids.RGBGrid
+import business.generators.image.RandomImageGenerator
 import models.images.RGBImage
 
-import scala.collection.mutable.ListBuffer
+class RandomImageLoader extends ImageLoader[Option[String], RGBImage] {
 
-class RandomImageLoader extends ImageLoader[String, RGBImage] {
+  private val randomImageGenerator: RandomImageGenerator = new RandomImageGenerator()
 
-  override def load(path: String): RGBImage = {
-
-    // todo write logic
-    RGBImage(RGBGrid(ListBuffer(ListBuffer())))
+  override def load(path: Option[String]): RGBImage = {
+    randomImageGenerator.generate()
   }
 }

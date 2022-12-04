@@ -1,5 +1,8 @@
 package business.generators.image
 
-trait ImageGenerator {
+import business.generators.Generator
+import models.images.Image
+
+trait ImageGenerator extends Generator[Image] {
 
 }

@@ -1,5 +1,6 @@
-package business.loaders.image
+package business.loaders.image.file
 
+import business.loaders.image.ImageLoader
 import models.grids.RGBGrid
 import models.images.RGBImage
 import models.pixels.RGBPixel

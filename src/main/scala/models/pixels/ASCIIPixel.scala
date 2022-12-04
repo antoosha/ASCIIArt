@@ -1,5 +1,5 @@
 package models.pixels
 
-case class ASCIIPixel() extends Pixel {
-
+case class ASCIIPixel(private var brightness: Int) extends Pixel {
+  def getBrightness: Int = brightness
 }

@@ -1,5 +1,5 @@
 package ui.exceptions
 
-class InputConsoleParserException(val message: String) extends Exception {
+class InputConsoleParserException(private val message: String) extends Exception {
   //TODO
 }

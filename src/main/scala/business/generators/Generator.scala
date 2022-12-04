@@ -1,5 +1,6 @@
 package business.generators
 
-trait Generator {
+trait Generator[R] {
 
+  def generate(): R
 }

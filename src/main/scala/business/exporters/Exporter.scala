@@ -1,5 +1,7 @@
 package business.exporters
 
-trait Exporter {
+trait Exporter[I, P] {
+
+  def export(item: I, path: Option[P]): Unit
 
 }

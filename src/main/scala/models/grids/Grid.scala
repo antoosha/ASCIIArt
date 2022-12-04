@@ -1,7 +1,11 @@
 package models.grids
 
-import models.pixels.Pixel
+trait Grid[T] {
 
-trait Grid[T <: Pixel] {
+  def getElement(x: Int, y: Int): T
+
+  def getHeight: Int
+
+  def getWidth: Int
 
 }

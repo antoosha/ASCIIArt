@@ -1,9 +1,8 @@
 package business.loaders.table
 
-import business.loaders.Loader
 import models.tables.LinearConversionTable
 
-class LinearTableLoader extends Loader[String, LinearConversionTable] {
+class LinearTableLoader extends TableLoader[String, LinearConversionTable] {
 
   override def load(path: String): LinearConversionTable = {
 

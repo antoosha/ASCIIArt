@@ -1,7 +1,18 @@
 package models.images
 
 import models.grids.RGBGrid
+import models.pixels.RGBPixel
 
-case class RGBImage(rgbGrid: RGBGrid) extends Image {
+case class RGBImage(private val rgbGrid: RGBGrid) extends Image {
+  override def getPixel(x: Int, y: Int): RGBPixel = {
+    rgbGrid.getElement(x, y)
+  }
 
+  override def getHeight: Int = {
+    rgbGrid.getHeight
+  }
+
+  override def getWidth: Int = {
+    rgbGrid.getWidth
+  }
 }

@@ -20,4 +20,11 @@ case class RGBPixel() extends Pixel {
     this.g = g
     this.b = b
   }
+
+  def getRed: Int = r
+
+  def getGreen: Int = g
+
+  def getBlue: Int = b
+
 }
