@@ -3,36 +3,51 @@ package ui.parser
 import models.Argument
 import ui.exceptions.InputConsoleParserException
 
-class ConsoleParser extends Parser[List[String], List[Argument]] {
+import scala.collection.mutable.ListBuffer
 
-  private val arguments: List[Argument] = List()
+class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
 
-  override def parse(args: List[String]): List[Argument] = {
+  private var arguments: ListBuffer[Argument] = ListBuffer()
+
+  override def parse(args: List[String]): ListBuffer[Argument] = {
 
     if (args.isEmpty) {
       throw new InputConsoleParserException("No arguments found.")
     }
 
-    val arguments: List[Argument] = List()
-    for (i <- 0 to args.length if i % 2 == 0) {
-      args.take(i).last match {
+    if (args.head != "run") {
+      throw new InputConsoleParserException("First argument has to be command \"run\".")
+    }
+
+    var i: Int = 1
+    while (i < args.length) {
+      args(i) match {
         case "--image" => {
-          addArgument(args.take(i).last, i + 1, args)
+          addArgument(args(i), i + 1, args)
+          i += 1
         }
         case "--output-file" => {
-          addArgument(args.take(i).last, i + 1, args)
+          addArgument(args(i), i + 1, args)
+          i += 1
         }
         case "--rotate" => {
-          addArgument(args.take(i).last, i + 1, args)
-        }
-        case "--invert" => {
-          addArgument(args.take(i).last, i + 1, args)
+          addArgument(args(i), i + 1, args)
+          i += 1
         }
         case "--scale" => {
-          addArgument(args.take(i).last, i + 1, args)
+          addArgument(args(i), i + 1, args)
+          i += 1
         }
-        case _ => throw new InputConsoleParserException("There is noo known command as \"" + args.take(i).last + "\". ")
+        case "--invert" => {
+          addArgument(args(i))
+        }
+        case "--output-console" => {
+          addArgument(args(i))
+        }
+
+        case _ => throw new InputConsoleParserException("There is noo known command as \"" + args(i) + "\". ")
       }
+      i += 1
     }
     arguments
   }
@@ -41,6 +56,11 @@ class ConsoleParser extends Parser[List[String], List[Argument]] {
     if (idxVal > args.length) {
       throw new InputConsoleParserException("Parameter " + text + "has to have value.")
     }
-    arguments.appended(Argument(text, args.take(idxVal).last))
+    arguments.append(Argument(text, args(idxVal)))
+
+  }
+
+  private def addArgument(text: String): Unit = {
+    arguments.append(Argument(text, ""))
   }
 }
