@@ -1,5 +1,5 @@
 package models.tables
 
-class NonLinearConversionTable {
+case class NonLinearConversionTable() {
 
 }

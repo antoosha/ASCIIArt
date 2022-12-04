@@ -1,5 +1,5 @@
 package models.images
 
-class RGBImage {
+case class RGBImage() extends Image {
 
 }

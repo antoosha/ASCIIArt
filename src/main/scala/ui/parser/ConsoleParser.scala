@@ -41,6 +41,9 @@ class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
         case "--invert" => {
           addArgument(args(i))
         }
+        case "--image-random" => {
+          addArgument(args(i))
+        }
         case "--output-console" => {
           addArgument(args(i))
         }

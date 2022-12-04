@@ -1,5 +1,8 @@
 package business.loaders.table
 
-trait TableLoader {
+import business.loaders.Loader
+import models.tables.ConversionTable
+
+trait TableLoader[P, R <: ConversionTable] extends Loader[P, R] {
 
 }

@@ -1,5 +1,5 @@
 package models.grids
 
-class ASCIIGrid {
+case class ASCIIGrid() {
 
 }

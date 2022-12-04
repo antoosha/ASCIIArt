@@ -1,5 +1,12 @@
 package business.loaders.image
 
-class JPGImageLoader {
+import models.images.{RGBImage}
 
+class JPGImageLoader extends ImageLoader[String, RGBImage] {
+
+  override def load(path: String): RGBImage = {
+
+    // todo write logic
+    RGBImage()
+  }
 }

@@ -1,5 +1,5 @@
 package models.images
 
-class ASCIIImage {
+case class ASCIIImage() extends Image {
 
 }

@@ -1,5 +1,5 @@
 package models.pixels
 
-class RGBPixel {
+case class RGBPixel() {
 
 }

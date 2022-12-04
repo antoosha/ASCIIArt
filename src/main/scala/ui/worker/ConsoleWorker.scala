@@ -1,9 +1,10 @@
 package ui.worker
 
+import business.loaders.image.{JPGImageLoader, PNGImageLoader, RandomImageLoader}
 import models.Argument
-import models.images.Image
+import models.images.ASCIIImage
 import ui.parser.{ConsoleParser, Parser}
-import ui.presenter.{ConsoleImagePresenter, ConsoleTextPresenter, Presenter}
+import ui.presenter.{ConsoleASCIIImagePresenter, ConsoleTextPresenter, Presenter}
 
 import java.io.OutputStream
 import scala.Console.out
@@ -11,10 +12,14 @@ import scala.collection.mutable.ListBuffer
 
 class ConsoleWorker extends Worker {
 
-  val parser: Parser[List[String], ListBuffer[Argument]] = new ConsoleParser
-  val textPresenter: Presenter[OutputStream, String] = new ConsoleTextPresenter
-  val imagePresenter: Presenter[OutputStream, Image] = new ConsoleImagePresenter
-  val welcomeText: String = "Welcome to ASCIIArt application!!!\n"
+  private val parser: Parser[List[String], ListBuffer[Argument]] = new ConsoleParser
+  private val textPresenter: Presenter[OutputStream, String] = new ConsoleTextPresenter
+  private val asciiImagePresenter: Presenter[OutputStream, ASCIIImage] = new ConsoleASCIIImagePresenter
+  private val jpgImageLoader: JPGImageLoader = new JPGImageLoader()
+  private val pngImageLoader: PNGImageLoader = new PNGImageLoader()
+  private val randomImageLoader: RandomImageLoader = new RandomImageLoader()
+  private val welcomeText: String = "Welcome to ASCIIArt application!!!\n"
+
 
   override def work(args: List[String]): Unit = {
 
@@ -23,6 +28,9 @@ class ConsoleWorker extends Worker {
   }
 
   private def resolveCommands(commands: ListBuffer[Argument]): Unit = {
+
+    // todo check if command --image is only one
+    //commands.foreach(c => Console.println(c.text + " " + c.value))
 
     for (command <- commands) {
       command.text match {
@@ -39,6 +47,9 @@ class ConsoleWorker extends Worker {
 
         }
         case "--invert" => {
+
+        }
+        case "--image-random" => {
 
         }
         case "--output-console" => {

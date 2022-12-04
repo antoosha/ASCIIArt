@@ -1,5 +1,5 @@
 package models.pixels
 
-class ASCIIPixel {
+case class ASCIIPixel() {
 
 }

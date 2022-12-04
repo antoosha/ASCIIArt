@@ -1,5 +1,5 @@
 package models.tables
 
-class LinearConversionTable {
+case class LinearConversionTable() {
 
 }

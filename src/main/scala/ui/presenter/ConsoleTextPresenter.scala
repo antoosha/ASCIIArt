@@ -3,12 +3,10 @@ package ui.presenter
 import java.io.OutputStream
 
 
-class ConsoleTextPresenter extends Presenter[OutputStream, String] {
+class ConsoleTextPresenter[T <: OutputStream] extends Presenter[T, String] {
 
-  override def present(os: OutputStream, text: String): Unit = {
-
-    os.write(text.getBytes())
+  override def present(os: T, res: String): Unit = {
+    os.write(res.getBytes())
   }
-
 
 }

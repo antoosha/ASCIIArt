@@ -1,5 +1,5 @@
 package models.grids
 
-class RGBGrid {
+case class RGBGrid() {
 
 }
