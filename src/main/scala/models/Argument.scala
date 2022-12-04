@@ -1,6 +1,6 @@
 package models
 
-case class Argument(val text: String, val value: String) {
+case class Argument(text: String, value: Option[String]) {
 
 }
 

@@ -1,5 +1,7 @@
 package models.grids
 
-trait Grid {
+import models.pixels.Pixel
+
+trait Grid[T <: Pixel] {
 
 }

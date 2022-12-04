@@ -1,5 +1,7 @@
 package models.grids
 
-case class ASCIIGrid() {
+import models.pixels.ASCIIPixel
+
+case class ASCIIGrid(charMatrix: List[List[Int]]) extends Grid[ASCIIPixel] {
 
 }

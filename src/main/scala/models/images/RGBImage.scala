@@ -1,5 +1,7 @@
 package models.images
 
-case class RGBImage() extends Image {
+import models.grids.RGBGrid
+
+case class RGBImage(rgbGrid: RGBGrid) extends Image {
 
 }

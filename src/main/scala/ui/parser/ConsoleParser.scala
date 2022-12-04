@@ -7,7 +7,7 @@ import scala.collection.mutable.ListBuffer
 
 class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
 
-  private var arguments: ListBuffer[Argument] = ListBuffer()
+  private val arguments: ListBuffer[Argument] = ListBuffer()
 
   override def parse(args: List[String]): ListBuffer[Argument] = {
 
@@ -59,11 +59,11 @@ class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
     if (idxVal > args.length) {
       throw new InputConsoleParserException("Parameter " + text + "has to have value.")
     }
-    arguments.append(Argument(text, args(idxVal)))
+    arguments.append(Argument(text, Some(args(idxVal))))
 
   }
 
   private def addArgument(text: String): Unit = {
-    arguments.append(Argument(text, ""))
+    arguments.append(Argument(text, None))
   }
 }

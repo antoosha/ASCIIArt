@@ -2,7 +2,7 @@ package ui.worker
 
 import business.loaders.image.{JPGImageLoader, PNGImageLoader, RandomImageLoader}
 import models.Argument
-import models.images.ASCIIImage
+import models.images.{ASCIIImage, Image}
 import ui.parser.{ConsoleParser, Parser}
 import ui.presenter.{ConsoleASCIIImagePresenter, ConsoleTextPresenter, Presenter}
 
@@ -29,13 +29,22 @@ class ConsoleWorker extends Worker {
 
   private def resolveCommands(commands: ListBuffer[Argument]): Unit = {
 
+    var loadedImage: Option[Image] = None
+
     // todo check if command --image is only one
     //commands.foreach(c => Console.println(c.text + " " + c.value))
 
     for (command <- commands) {
       command.text match {
         case "--image" => {
-
+          if (command.value.get.contains(".jpg") || command.value.get.contains(".jpeg")) {
+            loadedImage = Some(jpgImageLoader.load(command.value.get))
+          }
+          else if (command.value.get.contains(".png")) {
+            loadedImage = Some(pngImageLoader.load(command.value.get))
+          } else {
+            throw new IllegalStateException(s"It is not possible to load file ${command.text} because of it's format.")
+          }
         }
         case "--output-file" => {
 
