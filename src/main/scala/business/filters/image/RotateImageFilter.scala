@@ -1,5 +1,9 @@
 package business.filters.image
 
-class RotateImageFilter {
+import models.images.Image
+
+class RotateImageFilter(private val value: String) extends ImageFilter {
+
+  override def apply: Image = ???
 
 }

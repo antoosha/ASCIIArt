@@ -1,5 +1,6 @@
 package business.filters
 
-trait Filter {
+trait Filter[R] {
 
+  def apply: R
 }

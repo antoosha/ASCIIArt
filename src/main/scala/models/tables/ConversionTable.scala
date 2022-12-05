@@ -1,8 +1,8 @@
 package models.tables
 
-trait ConversionTable[R] {
+trait ConversionTable[T, R] {
 
-  def getConversionTable: R
+  def getConversionTable: T
 
   def getValue(idx: Int): R
 }

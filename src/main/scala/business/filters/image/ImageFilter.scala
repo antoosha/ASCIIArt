@@ -1,5 +1,8 @@
 package business.filters.image
 
-trait ImageFilter {
+import business.filters.Filter
+import models.images.Image
+
+trait ImageFilter extends Filter[Image] {
 
 }

@@ -2,6 +2,6 @@ package models.tables.nonlinear
 
 import models.tables.ConversionTable
 
-trait NonLinearConversionTable[R] extends ConversionTable[R] {
+trait NonLinearConversionTable[T, R] extends ConversionTable[T, R] {
 
 }

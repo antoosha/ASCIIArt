@@ -1,5 +1,5 @@
 package business.converters
 
-trait Converter {
-
+trait Converter[T, R] {
+  def convert(item: T): R
 }

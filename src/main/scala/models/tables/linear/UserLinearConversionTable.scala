@@ -1,6 +1,6 @@
 package models.tables.linear
 
-case class UserLinearConversionTable(private var conversionTable: String = "") extends LinearConversionTable[String] {
+case class UserLinearConversionTable(private var conversionTable: String = "") extends LinearConversionTable[String, Char] {
 
   override def getConversionTable: String = conversionTable
 
@@ -8,12 +8,12 @@ case class UserLinearConversionTable(private var conversionTable: String = "") e
     this.conversionTable = conversionTable
   }
 
-  override def getValue(idx: Int): String = {
+  override def getValue(idx: Int): Char = {
 
     if (idx >= conversionTable.length) {
       throw new IllegalStateException("Index of the value in conversion table is out of bound.")
     }
-    conversionTable(idx).toString
+    conversionTable(idx)
   }
 
 }

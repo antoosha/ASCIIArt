@@ -8,4 +8,8 @@ case class ASCIIPixel(private var brightness: Int) extends Pixel {
 
   def getPixel: Char = pixel
 
+  def setPixel(char: Char): Unit = {
+    pixel = char
+  }
+
 }

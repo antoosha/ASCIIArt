@@ -1,11 +1,15 @@
 package ui.worker
 
+import business.converters.image.RGBToASCIIImageConverter
 import business.exporters.image.console.ConsoleASCIIImageExporter
 import business.exporters.image.file.TxtFileASCIIImageExporter
+import business.filters.image.{InvertImageFilter, RotateImageFilter, ScaleImageFilter}
 import business.loaders.image.RandomImageLoader
 import business.loaders.image.file.{JPGImageLoader, PNGImageLoader}
 import models.Argument
-import models.images.{ASCIIImage, Image}
+import models.images.RGBImage
+import models.tables.linear.UserLinearConversionTable
+import models.tables.nonlinear.SimpleNonLinearConversionTable
 import ui.parser.{ConsoleParser, Parser}
 import ui.presenter.{ConsoleTextPresenter, Presenter}
 
@@ -22,9 +26,11 @@ class ConsoleWorker extends Worker {
   private val randomImageLoader: RandomImageLoader = new RandomImageLoader()
   private val consoleASCIIImageExporter: ConsoleASCIIImageExporter = new ConsoleASCIIImageExporter
   private val txtFileASCIIImageExporter: TxtFileASCIIImageExporter = new TxtFileASCIIImageExporter
+  private val converter: RGBToASCIIImageConverter = RGBToASCIIImageConverter()
+
   private val welcomeText: String = "Welcome to ASCIIArt application!!!\n"
 
-
+  // maybe rewrite to Commands and each user's input is one of those commands
   override def work(args: List[String]): Unit = {
 
     textPresenter.present(out, welcomeText)
@@ -34,8 +40,7 @@ class ConsoleWorker extends Worker {
   // todo move logic from cases to private methods
   private def resolveCommands(commands: ListBuffer[Argument]): Unit = {
 
-    var loadedImage: Option[Image] = None
-    var convertedImage: Option[ASCIIImage] = None
+    var loadedImage: Option[RGBImage] = None
 
     // todo check if command --image is only one
     //commands.foreach(c => Console.println(c.getText + " " + c.getValue))
@@ -54,26 +59,39 @@ class ConsoleWorker extends Worker {
         }
         case "--output-file" => {
           if (command.getValue.get.endsWith(".txt")) {
-            txtFileASCIIImageExporter.export(convertedImage.get, command.getValue.get)
+            txtFileASCIIImageExporter.export(converter.convert(loadedImage.get), command.getValue.get)
           } else {
             throw new IllegalStateException(s"It is not possible to export to file ${command.getText} because of it's format. "
               + s"Only .txt format is possible.")
           }
         }
         case "--rotate" => {
-
+          val rotateFilter: RotateImageFilter = new RotateImageFilter(command.getValue.get)
+          converter.addFilter(rotateFilter)
         }
         case "--scale" => {
-
+          val scaleFilter: ScaleImageFilter = new ScaleImageFilter(command.getValue.get)
+          converter.addFilter(scaleFilter)
         }
         case "--invert" => {
-
+          val invertFilter: InvertImageFilter = new InvertImageFilter(command.getValue.get)
+          converter.addFilter(invertFilter)
+        }
+        case "--table" => {
+          command.getValue.get match {
+            case "linearBrokes" => //is set by default
+            case "nonLinearSimple" => converter.setTable(SimpleNonLinearConversionTable())
+            case _ => throw new IllegalStateException(s"Table name ${command.getValue.get} does not exist.")
+          }
+        }
+        case "--custom-table" => {
+          converter.setTable(UserLinearConversionTable(command.getValue.get))
         }
         case "--image-random" => {
           loadedImage = Some(randomImageLoader.load(None))
         }
         case "--output-console" => {
-          consoleASCIIImageExporter.export(convertedImage.get, Console.out)
+          consoleASCIIImageExporter.export(converter.convert(loadedImage.get), Console.out)
         }
         case _ => throw new IllegalStateException(s"Something went wrong with ${command.getText} command.")
       }

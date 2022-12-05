@@ -2,6 +2,6 @@ package models.tables.linear
 
 import models.tables.ConversionTable
 
-trait LinearConversionTable[R] extends ConversionTable[R] {
+trait LinearConversionTable[T, R] extends ConversionTable[T, R] {
 
 }

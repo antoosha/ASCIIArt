@@ -1,5 +1,9 @@
 package business.filters.image
 
-class ScaleImageFilter {
+import models.images.Image
+
+class ScaleImageFilter(private val value: String) extends ImageFilter {
+
+  override def apply: Image = ???
 
 }

@@ -10,15 +10,15 @@ case class RGBGrid(private val rgbGrid: ListBuffer[ListBuffer[RGBPixel]]) extend
   }
 
   override def getHeight: Int = {
+    rgbGrid.length
+  }
+
+  override def getWidth: Int = {
     if (getHeight == 0) {
       0
     }
     else {
       rgbGrid.head.length
     }
-  }
-
-  override def getWidth: Int = {
-    rgbGrid.length
   }
 }
