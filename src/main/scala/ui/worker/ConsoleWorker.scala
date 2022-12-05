@@ -99,6 +99,7 @@ class ConsoleWorker extends Worker {
   }
 
   private def sortCommands(commands: ListBuffer[Argument]): ListBuffer[Argument] = {
+
     var editedCommands = commands
     val sorted: ListBuffer[Argument] = ListBuffer()
 
