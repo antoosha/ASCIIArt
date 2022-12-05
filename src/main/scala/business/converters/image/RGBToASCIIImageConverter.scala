@@ -9,7 +9,7 @@ import models.tables.linear.PaulBrokesLinearConversionTable
 
 import scala.collection.mutable.ListBuffer
 
-case class RGBToASCIIImageConverter(private var conversionTable: ConversionTable[String, Char] = PaulBrokesLinearConversionTable()) extends ImageConverter[RGBImage, ASCIIImage] {
+case class RGBToASCIIImageConverter(private var convTable: ConversionTable[String, Char] = PaulBrokesLinearConversionTable()) extends ImageConverter[RGBImage, ASCIIImage] {
 
   var filters: ListBuffer[ImageFilter] = ListBuffer()
 
@@ -34,15 +34,21 @@ case class RGBToASCIIImageConverter(private var conversionTable: ConversionTable
     } else if (value < 0) {
       value = 0
     }
-    var asciiPixel: ASCIIPixel = ASCIIPixel(value.toInt)
+    val asciiPixel: ASCIIPixel = ASCIIPixel(value.toInt)
 
-    val greyscaleValue = (((conversionTable.getConversionTable.length - 1) * (asciiPixel.getBrightness / 255.0)) % conversionTable.getConversionTable.length).toInt
-    asciiPixel.setPixel(conversionTable.getValue(greyscaleValue))
+    var greyscaleValue = 0
+    if (convTable.offset == 0) {
+      greyscaleValue = ((convTable.getTableValues.length * ((asciiPixel.getBrightness) / 256.0)) % convTable.getTableValues.length).toInt
+    } else if (asciiPixel.getBrightness > convTable.offset) {
+      greyscaleValue = (((convTable.getTableValues.length - 1) * ((asciiPixel.getBrightness - convTable.offset) / (256.0 - convTable.offset)))
+        % convTable.getTableValues.length).toInt + 1
+    }
+    asciiPixel.setPixel(convTable.getValue(greyscaleValue))
     asciiPixel
   }
 
   def setTable(conversionTable: ConversionTable[String, Char]): Unit = {
-    this.conversionTable = conversionTable
+    this.convTable = conversionTable
   }
 
   def addFilter(filter: ImageFilter): Unit = {

@@ -4,7 +4,9 @@ case class PaulBrokesLinearConversionTable() extends LinearConversionTable[Strin
 
   private final val conversionTable: String = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
 
-  override def getConversionTable: String = conversionTable
+  override def offset: Int = 0
+
+  override def getTableValues: String = conversionTable
 
   override def getValue(idx: Int): Char = {
 

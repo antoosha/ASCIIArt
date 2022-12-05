@@ -2,7 +2,10 @@ package models.tables.linear
 
 case class UserLinearConversionTable(private var conversionTable: String = "") extends LinearConversionTable[String, Char] {
 
-  override def getConversionTable: String = conversionTable
+  override def getTableValues: String = conversionTable
+
+  override def offset: Int = 0
+
 
   def setConversionTable(conversionTable: String): Unit = {
     this.conversionTable = conversionTable

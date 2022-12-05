@@ -38,6 +38,10 @@ class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
           addArgument(args(i), i + 1, args)
           i += 1
         }
+        case "--table" => {
+          addArgument(args(i), i + 1, args)
+          i += 1
+        }
         case "--invert" => {
           addArgument(args(i))
         }

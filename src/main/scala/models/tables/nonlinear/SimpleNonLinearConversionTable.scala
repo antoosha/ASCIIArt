@@ -4,7 +4,9 @@ case class SimpleNonLinearConversionTable() extends NonLinearConversionTable[Str
 
   private val conversionTable: String = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
 
-  override def getConversionTable: String = conversionTable
+  override def offset: Int = 100
+
+  override def getTableValues: String = conversionTable
 
   override def getValue(idx: Int): Char = {
 

@@ -103,12 +103,13 @@ class ConsoleWorker extends Worker {
     var editedCommands = commands
     val sorted: ListBuffer[Argument] = ListBuffer()
 
-    //add import
+    //add imports
+    // todo check if import is only one
     sorted.append(editedCommands.find(a => a.getText.equals("--image"))
       .getOrElse(throw new IllegalStateException("There is no command --image to import any image.")))
     editedCommands = editedCommands.dropWhile(a => a.getText.equals("--image"))
 
-    //add all filters
+    //add table and filters
     for (command <- editedCommands) {
       if (command.getText != "--output-console" && command.getText != "--output-file") {
         sorted.append(command)
