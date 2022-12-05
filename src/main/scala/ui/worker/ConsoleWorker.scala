@@ -43,7 +43,7 @@ class ConsoleWorker extends Worker {
     for (command <- commands) {
       command.getText match {
         case "--image" => {
-          if (command.getValue.get.contains(".jpg") || command.getValue.get.contains(".jpeg")) {
+          if (command.getValue.get.endsWith(".jpg") || command.getValue.get.endsWith(".jpeg")) {
             loadedImage = Some(jpgImageLoader.load(command.getValue.get))
           }
           else if (command.getValue.get.contains(".png")) {
@@ -53,7 +53,7 @@ class ConsoleWorker extends Worker {
           }
         }
         case "--output-file" => {
-          if (command.getValue.get.contains(".txt")) {
+          if (command.getValue.get.endsWith(".txt")) {
             txtFileASCIIImageExporter.export(convertedImage.get, command.getValue.get)
           } else {
             throw new IllegalStateException(s"It is not possible to export to file ${command.getText} because of it's format. "

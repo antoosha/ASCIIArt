@@ -1,12 +1,13 @@
 package business.loaders.table
 
-import models.tables.LinearConversionTable
+import models.tables.linear.{LinearConversionTable, PaulBrokesLinearConversionTable}
 
-class LinearTableLoader extends TableLoader[String, LinearConversionTable] {
+//todo change in LinearConversionTable[String] String to T
+class LinearTableLoader extends TableLoader[String, LinearConversionTable[String]] {
 
-  override def load(path: String): LinearConversionTable = {
+  override def load(path: String): LinearConversionTable[String] = {
 
     // todo write logic
-    LinearConversionTable()
+    PaulBrokesLinearConversionTable()
   }
 }
