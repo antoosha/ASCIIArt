@@ -11,16 +11,12 @@ import models.images.RGBImage
 import models.tables.linear.UserLinearConversionTable
 import models.tables.nonlinear.SimpleNonLinearConversionTable
 import ui.parser.{ConsoleParser, Parser}
-import ui.presenter.{ConsoleTextPresenter, Presenter}
 
-import java.io.OutputStream
-import scala.Console.out
 import scala.collection.mutable.ListBuffer
 
 class ConsoleWorker extends Worker {
 
   private val parser: Parser[List[String], ListBuffer[Argument]] = new ConsoleParser
-  private val textPresenter: Presenter[OutputStream, String] = new ConsoleTextPresenter
   private val jpgImageLoader: JPGImageLoader = new JPGImageLoader()
   private val pngImageLoader: PNGImageLoader = new PNGImageLoader()
   private val randomImageLoader: RandomImageLoader = new RandomImageLoader()
@@ -28,16 +24,13 @@ class ConsoleWorker extends Worker {
   private val txtFileASCIIImageExporter: TxtFileASCIIImageExporter = new TxtFileASCIIImageExporter
   private val converter: RGBToASCIIImageConverter = RGBToASCIIImageConverter()
 
-  private val welcomeText: String = "Welcome to ASCIIArt application!!!\n"
 
   // maybe rewrite to Commands and each user's input is one of those commands
   override def work(args: List[String]): Unit = {
 
-    textPresenter.present(out, welcomeText)
     resolveCommands(sortCommands(parser.parse(args)))
   }
 
-  // todo move logic from cases to private methods
   private def resolveCommands(commands: ListBuffer[Argument]): Unit = {
 
     var loadedImage: Option[RGBImage] = None
