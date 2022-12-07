@@ -14,12 +14,14 @@ case class RGBToASCIIImageConverter(private var convTable: ConversionTable[Strin
   var filters: ListBuffer[ImageFilter[ASCIIImage]] = ListBuffer()
 
   override def convert(item: RGBImage): ASCIIImage = {
+
     val asciiGrid: ListBuffer[ListBuffer[ASCIIPixel]] = ListBuffer()
 
+    //count brightness
     for (y <- 0 until item.getHeight) {
       val asciiRow = ListBuffer[ASCIIPixel]()
       for (x <- 0 until item.getWidth) {
-        asciiRow.append(convertRGBPixelToASCIIPixel(item.getPixel(x, y)))
+        asciiRow.append(countBrightnessForRGBPixelToASCIIPixel(item.getPixel(x, y)))
       }
       asciiGrid.append(asciiRow)
     }
@@ -29,10 +31,18 @@ case class RGBToASCIIImageConverter(private var convTable: ConversionTable[Strin
     for (i <- filters.indices) {
       resultASCIIImage = filters(i).apply(resultASCIIImage)
     }
+
+    //count char value
+    for (y <- 0 until item.getHeight) {
+      for (x <- 0 until item.getWidth) {
+        countValueFromBrightnessForASCIIPixel(resultASCIIImage.getPixel(x, y))
+      }
+    }
+
     resultASCIIImage
   }
 
-  private def convertRGBPixelToASCIIPixel(rgb: RGBPixel): ASCIIPixel = {
+  private def countBrightnessForRGBPixelToASCIIPixel(rgb: RGBPixel): ASCIIPixel = {
 
     var value = (0.3 * rgb.getRed) + (0.59 * rgb.getGreen) + (0.11 * rgb.getBlue)
     if (value > 255) {
@@ -40,17 +50,19 @@ case class RGBToASCIIImageConverter(private var convTable: ConversionTable[Strin
     } else if (value < 0) {
       value = 0
     }
-    val asciiPixel: ASCIIPixel = ASCIIPixel(value.toInt)
+    ASCIIPixel(value.toInt)
+  }
+
+  private def countValueFromBrightnessForASCIIPixel(asciiPixel: ASCIIPixel): Unit = {
 
     var greyscaleValue = 0
     if (convTable.offset == 0) {
-      greyscaleValue = ((convTable.getTableValues.length * ((asciiPixel.getBrightness) / 256.0)) % convTable.getTableValues.length).toInt
+      greyscaleValue = ((convTable.getTableValues.length * (asciiPixel.getBrightness / 256.0)) % convTable.getTableValues.length).toInt
     } else if (asciiPixel.getBrightness > convTable.offset) {
       greyscaleValue = (((convTable.getTableValues.length - 1) * ((asciiPixel.getBrightness - convTable.offset) / (256.0 - convTable.offset)))
         % convTable.getTableValues.length).toInt + 1
     }
     asciiPixel.setPixel(convTable.getValue(greyscaleValue))
-    asciiPixel
   }
 
   def setTable(conversionTable: ConversionTable[String, Char]): Unit = {
