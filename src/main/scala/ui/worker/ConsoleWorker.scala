@@ -37,9 +37,6 @@ class ConsoleWorker extends Worker {
 
     var loadedImage: Option[RGBImage] = None
 
-    // todo check if command --image is only one
-    //commands.foreach(c => Console.println(c.getText + " " + c.getValue))
-
     for (command <- commands) {
       command.getText match {
         case "--image" => {
@@ -55,6 +52,7 @@ class ConsoleWorker extends Worker {
         case "--output-file" => {
           if (command.getValue.get.endsWith(".txt")) {
             txtFileASCIIImageExporter.export(converter.convert(loadedImage.get), command.getValue.get)
+            printSuccess()
           } else {
             throw new IllegalStateException(s"It is not possible to export to file ${command.getText} because of it's format. "
               + s"Only .txt format is possible.")
@@ -91,6 +89,12 @@ class ConsoleWorker extends Worker {
         case _ => throw new IllegalStateException(s"Something went wrong with ${command.getText} command.")
       }
     }
+  }
+
+  private def printSuccess(): Unit = {
+
+    val loadedImage: RGBImage = pngImageLoader.load("images/success.jpg")
+    consoleASCIIImageExporter.export(RGBToASCIIImageConverter(UserLinearConversionTable("55 ")).convert(loadedImage), Console.out)
   }
 
   private def sortCommands(commands: ListBuffer[Argument]): ListBuffer[Argument] = {
