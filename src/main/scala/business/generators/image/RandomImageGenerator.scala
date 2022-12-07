@@ -8,18 +8,21 @@ import scala.collection.mutable.ListBuffer
 
 class RandomImageGenerator() extends ImageGenerator {
   override def generate(): RGBImage = {
+    val from: Int = 200
+    val to: Int = 1600
+
     val rg = scala.util.Random
-    val width = rg.between(200, 1600)
-    val height = rg.between(200, 1600)
+    val width = rg.between(from, to)
+    val height = rg.between(from, to)
     var generatedPixelGrid = ListBuffer[ListBuffer[RGBPixel]]()
-    for (i <- 0 to height) {
-      var pixelRow = ListBuffer[RGBPixel]()
-      for (e <- 0 to width) {
-        pixelRow.append(new RGBPixel(rg.nextInt(255), rg.nextInt(255), rg.nextInt(255)))
+    for (i <- 0 until height) {
+      val pixelRow = ListBuffer[RGBPixel]()
+      for (j <- 0 until width) {
+        pixelRow.append(new RGBPixel(rg.nextInt(256), rg.nextInt(256), rg.nextInt(256)))
       }
       generatedPixelGrid.append(pixelRow)
     }
 
-    RGBImage(RGBGrid(ListBuffer(ListBuffer())))
+    RGBImage(RGBGrid(generatedPixelGrid))
   }
 }

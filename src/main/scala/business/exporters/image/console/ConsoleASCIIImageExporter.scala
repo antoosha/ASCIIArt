@@ -9,7 +9,7 @@ class ConsoleASCIIImageExporter extends ImageExporter[ASCIIImage, PrintStream] {
 
   override def export(item: ASCIIImage, out: PrintStream): Unit = {
     for (y <- 0 until item.getHeight) {
-      for (x <- 0 until item.getHeight) {
+      for (x <- 0 until item.getWidth) {
         out.print(item.getPixel(x, y).getPixel)
       }
       out.println()

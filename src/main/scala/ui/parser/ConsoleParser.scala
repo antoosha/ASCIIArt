@@ -15,10 +15,6 @@ class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
       throw new InputConsoleParserException("No arguments found.")
     }
 
-    if (args.head != "run") {
-      throw new InputConsoleParserException("First argument has to be command \"run\".")
-    }
-
     var i: Int = 1
     while (i < args.length) {
       args(i) match {

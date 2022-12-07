@@ -25,9 +25,11 @@ class ConsoleWorker extends Worker {
   private val converter: RGBToASCIIImageConverter = RGBToASCIIImageConverter()
 
 
-  // maybe rewrite to Commands and each user's input is one of those commands
   override def work(args: List[String]): Unit = {
 
+    if ("run" != args.head) {
+      throw new IllegalStateException("First argument has to be command \"run\" to start the app.")
+    }
     resolveCommands(sortCommands(parser.parse(args)))
   }
 
@@ -98,9 +100,19 @@ class ConsoleWorker extends Worker {
 
     //add imports
     // todo check if import is only one
-    sorted.append(editedCommands.find(a => a.getText.equals("--image"))
-      .getOrElse(throw new IllegalStateException("There is no command --image to import any image.")))
-    editedCommands = editedCommands.dropWhile(a => a.getText.equals("--image"))
+
+    if (editedCommands.exists(a => a.getText.equals("--image")) && editedCommands.exists(a => a.getText.equals("--image-random"))) {
+      throw new IllegalStateException("There are more then one command to import image.")
+    }
+    if (editedCommands.exists(a => a.getText.equals("--image"))) {
+      sorted.append(editedCommands.find(a => a.getText.equals("--image")).get)
+      editedCommands = editedCommands.dropWhile(a => a.getText.equals("--image"))
+    } else if (editedCommands.exists(a => a.getText.equals("--image-random"))) {
+      sorted.append(editedCommands.find(a => a.getText.equals("--image-random")).get)
+      editedCommands = editedCommands.dropWhile(a => a.getText.equals("--image-random"))
+    } else {
+      throw new IllegalStateException("There is no command --image or --image-random to import any image.")
+    }
 
     //add table and filters
     for (command <- editedCommands) {
