@@ -103,8 +103,6 @@ class ConsoleWorker extends Worker {
     val sorted: ListBuffer[Argument] = ListBuffer()
 
     //add imports
-    // todo check if import is only one
-
     if (editedCommands.exists(a => a.getText.equals("--image")) && editedCommands.exists(a => a.getText.equals("--image-random"))) {
       throw new IllegalStateException("There are more then one command to import image.")
     }
