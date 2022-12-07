@@ -11,7 +11,7 @@ import scala.collection.mutable.ListBuffer
 
 case class RGBToASCIIImageConverter(private var convTable: ConversionTable[String, Char] = PaulBrokesLinearConversionTable()) extends ImageConverter[RGBImage, ASCIIImage] {
 
-  var filters: ListBuffer[ImageFilter] = ListBuffer()
+  var filters: ListBuffer[ImageFilter[ASCIIImage]] = ListBuffer()
 
   override def convert(item: RGBImage): ASCIIImage = {
     val asciiGrid: ListBuffer[ListBuffer[ASCIIPixel]] = ListBuffer()
@@ -23,7 +23,13 @@ case class RGBToASCIIImageConverter(private var convTable: ConversionTable[Strin
       }
       asciiGrid.append(asciiRow)
     }
-    ASCIIImage(ASCIIGrid(asciiGrid))
+
+    //apply all filters
+    var resultASCIIImage: ASCIIImage = ASCIIImage(ASCIIGrid(asciiGrid))
+    for (i <- filters.indices) {
+      resultASCIIImage = filters(i).apply(resultASCIIImage)
+    }
+    resultASCIIImage
   }
 
   private def convertRGBPixelToASCIIPixel(rgb: RGBPixel): ASCIIPixel = {
@@ -51,7 +57,7 @@ case class RGBToASCIIImageConverter(private var convTable: ConversionTable[Strin
     this.convTable = conversionTable
   }
 
-  def addFilter(filter: ImageFilter): Unit = {
+  def addFilter(filter: ImageFilter[ASCIIImage]): Unit = {
     filters.append(filter)
   }
 }

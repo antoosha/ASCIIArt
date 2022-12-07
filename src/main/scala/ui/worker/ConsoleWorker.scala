@@ -3,7 +3,7 @@ package ui.worker
 import business.converters.image.RGBToASCIIImageConverter
 import business.exporters.image.console.ConsoleASCIIImageExporter
 import business.exporters.image.file.TxtFileASCIIImageExporter
-import business.filters.image.{InvertImageFilter, RotateImageFilter, ScaleImageFilter}
+import business.filters.image.ascii.{BrightnessASCIIImageFilter, FlipASCIIImageFilter, InvertASCIIImageFilter}
 import business.loaders.image.RandomImageLoader
 import business.loaders.image.file.{JPGImageLoader, PNGImageLoader}
 import models.Argument
@@ -60,16 +60,16 @@ class ConsoleWorker extends Worker {
               + s"Only .txt format is possible.")
           }
         }
-        case "--rotate" => {
-          val rotateFilter: RotateImageFilter = new RotateImageFilter(command.getValue.get)
-          converter.addFilter(rotateFilter)
+        case "--brightness" => {
+          val brightnessFilter: BrightnessASCIIImageFilter = new BrightnessASCIIImageFilter(command.getValue.get)
+          converter.addFilter(brightnessFilter)
         }
-        case "--scale" => {
-          val scaleFilter: ScaleImageFilter = new ScaleImageFilter(command.getValue.get)
-          converter.addFilter(scaleFilter)
+        case "--flip" => {
+          val flipFilter: FlipASCIIImageFilter = new FlipASCIIImageFilter(command.getValue.get)
+          converter.addFilter(flipFilter)
         }
         case "--invert" => {
-          val invertFilter: InvertImageFilter = new InvertImageFilter(command.getValue.get)
+          val invertFilter: InvertASCIIImageFilter = new InvertASCIIImageFilter()
           converter.addFilter(invertFilter)
         }
         case "--table" => {

@@ -26,11 +26,11 @@ class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
           addArgument(args(i), i + 1, args)
           i += 1
         }
-        case "--rotate" => {
+        case "--brightness" => {
           addArgument(args(i), i + 1, args)
           i += 1
         }
-        case "--scale" => {
+        case "--flip" => {
           addArgument(args(i), i + 1, args)
           i += 1
         }
