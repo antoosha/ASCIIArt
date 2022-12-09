@@ -2,13 +2,11 @@ package ui.parser
 
 import models.Argument
 
-import scala.collection.mutable.ListBuffer
+class ConsoleParser extends Parser[Seq[String], Seq[Argument]] {
 
-class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
+  private var arguments: Seq[Argument] = Seq()
 
-  private val arguments: ListBuffer[Argument] = ListBuffer()
-
-  override def parse(args: List[String]): ListBuffer[Argument] = {
+  override def parse(args: Seq[String]): Seq[Argument] = {
 
     if (args.isEmpty) {
       throw new IllegalStateException("No arguments found.")
@@ -37,6 +35,10 @@ class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
           addArgument(args(i), i + 1, args)
           i += 1
         }
+        case "--custom-table" => {
+          addArgument(args(i), i + 1, args)
+          i += 1
+        }
         case "--invert" => {
           addArgument(args(i))
         }
@@ -46,22 +48,21 @@ class ConsoleParser extends Parser[List[String], ListBuffer[Argument]] {
         case "--output-console" => {
           addArgument(args(i))
         }
-        case _ => throw new IllegalStateException("There is noo known command as \"" + args(i) + "\". ")
+        case _ => throw new IllegalStateException("There is no known command as \"" + args(i) + "\". ")
       }
       i += 1
     }
     arguments
   }
 
-  private def addArgument(text: String, idxVal: Int, args: List[String]): Unit = {
+  private def addArgument(text: String, idxVal: Int, args: Seq[String]): Unit = {
     if (idxVal > args.length) {
       throw new IllegalStateException("Parameter " + text + "has to have value.")
     }
-    arguments.append(Argument(text, Some(args(idxVal))))
-
+    arguments = arguments.appended(Argument(text, Some(args(idxVal))))
   }
 
   private def addArgument(text: String): Unit = {
-    arguments.append(Argument(text, None))
+    arguments = arguments.appended(Argument(text, None))
   }
 }

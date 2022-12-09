@@ -11,7 +11,7 @@ class TxtFileASCIIImageExporter extends FileImageExporter[ASCIIImage, String] {
     val file = new File(out)
     val bw = new BufferedWriter(new FileWriter(file))
     for (y <- 0 until item.getHeight) {
-      for (x <- 0 until item.getHeight) {
+      for (x <- 0 until item.getWidth) {
         bw.write(item.getPixel(x, y).getPixel)
       }
       bw.write("\n")

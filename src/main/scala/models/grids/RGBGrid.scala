@@ -2,9 +2,7 @@ package models.grids
 
 import models.pixels.RGBPixel
 
-import scala.collection.mutable.ListBuffer
-
-case class RGBGrid(private val rgbGrid: ListBuffer[ListBuffer[RGBPixel]]) extends PixelGrid[RGBPixel] {
+case class RGBGrid(private val rgbGrid: Seq[Seq[RGBPixel]]) extends PixelGrid[RGBPixel] {
   override def getElement(x: Int, y: Int): RGBPixel = {
     rgbGrid(y)(x)
   }

@@ -7,23 +7,21 @@ import models.pixels.{ASCIIPixel, RGBPixel}
 import models.tables.ConversionTable
 import models.tables.linear.PaulBourkesLinearConversionTable
 
-import scala.collection.mutable.ListBuffer
-
 case class RGBToASCIIImageConverter(private var convTable: ConversionTable[String, Char] = PaulBourkesLinearConversionTable()) extends ImageConverter[RGBImage, ASCIIImage] {
 
-  var filters: ListBuffer[ImageFilter[ASCIIImage]] = ListBuffer()
+  var filters: Seq[ImageFilter[ASCIIImage]] = Seq()
 
   override def convert(item: RGBImage): ASCIIImage = {
 
-    val asciiGrid: ListBuffer[ListBuffer[ASCIIPixel]] = ListBuffer()
+    var asciiGrid: Seq[Seq[ASCIIPixel]] = Seq()
 
     //count brightness
     for (y <- 0 until item.getHeight) {
-      val asciiRow = ListBuffer[ASCIIPixel]()
+      var asciiRow = Seq[ASCIIPixel]()
       for (x <- 0 until item.getWidth) {
-        asciiRow.append(countBrightnessForRGBPixelToASCIIPixel(item.getPixel(x, y)))
+        asciiRow = asciiRow.appended(countBrightnessForRGBPixelToASCIIPixel(item.getPixel(x, y)))
       }
-      asciiGrid.append(asciiRow)
+      asciiGrid = asciiGrid.appended(asciiRow)
     }
 
     //apply all filters
@@ -70,6 +68,6 @@ case class RGBToASCIIImageConverter(private var convTable: ConversionTable[Strin
   }
 
   def addFilter(filter: ImageFilter[ASCIIImage]): Unit = {
-    filters.append(filter)
+    filters = filters.appended(filter)
   }
 }

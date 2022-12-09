@@ -7,7 +7,6 @@ import models.pixels.RGBPixel
 import java.awt.Color
 import java.io.File
 import javax.imageio.ImageIO
-import scala.collection.mutable.ListBuffer
 
 class JpgPngImageLoader extends FileImageLoader[String, RGBImage] {
 
@@ -15,18 +14,18 @@ class JpgPngImageLoader extends FileImageLoader[String, RGBImage] {
 
     try {
       val image = ImageIO.read(new File(path))
-      val pixelList = ListBuffer[ListBuffer[RGBPixel]]()
+      var pixelGrid = Seq[Seq[RGBPixel]]()
 
       for (y <- 0 until image.getHeight()) {
-        val pixelRow = ListBuffer[RGBPixel]()
+        var pixelRow = Seq[RGBPixel]()
         for (x <- 0 until image.getWidth()) {
           val rgb = new Color(image.getRGB(x, y))
-          pixelRow.append(new RGBPixel(rgb.getRed, rgb.getGreen, rgb.getBlue))
+          pixelRow = pixelRow.appended(new RGBPixel(rgb.getRed, rgb.getGreen, rgb.getBlue))
         }
-        pixelList.append(pixelRow)
+        pixelGrid = pixelGrid.appended(pixelRow)
       }
 
-      RGBImage(RGBGrid(pixelList))
+      RGBImage(RGBGrid(pixelGrid))
     } catch {
       case e: Exception => throw new IllegalStateException(s"${e.getMessage} while importing image from $path.")
     }

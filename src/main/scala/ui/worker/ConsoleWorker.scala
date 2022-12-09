@@ -12,23 +12,21 @@ import models.tables.linear.UserLinearConversionTable
 import models.tables.nonlinear.SimpleNonLinearConversionTable
 import ui.parser.{ConsoleParser, Parser}
 
-import scala.collection.mutable.ListBuffer
-
 class ConsoleWorker extends Worker {
 
-  private val parser: Parser[List[String], ListBuffer[Argument]] = new ConsoleParser
+  private val parser: Parser[Seq[String], Seq[Argument]] = new ConsoleParser
   private val imageLoader: JpgPngImageLoader = new JpgPngImageLoader()
   private val randomImageLoader: RandomImageLoader = new RandomImageLoader()
   private val consoleASCIIImageExporter: ConsoleASCIIImageExporter = new ConsoleASCIIImageExporter
   private val txtFileASCIIImageExporter: TxtFileASCIIImageExporter = new TxtFileASCIIImageExporter
   private val converter: RGBToASCIIImageConverter = RGBToASCIIImageConverter()
 
-  override def work(args: List[String]): Unit = {
+  override def work(args: Seq[String]): Unit = {
 
     resolveCommands(sortCommands(parser.parse(args)))
   }
 
-  private def resolveCommands(commands: ListBuffer[Argument]): Unit = {
+  private def resolveCommands(commands: Seq[Argument]): Unit = {
 
     var loadedImage: Option[RGBImage] = None
     var convertedImage: Option[ASCIIImage] = None
@@ -89,20 +87,20 @@ class ConsoleWorker extends Worker {
     }
   }
 
-  private def sortCommands(commands: ListBuffer[Argument]): ListBuffer[Argument] = {
+  private def sortCommands(commands: Seq[Argument]): Seq[Argument] = {
 
     var editedCommands = commands
-    val sorted: ListBuffer[Argument] = ListBuffer()
+    var sorted: Seq[Argument] = Seq()
 
     //add imports
     if (editedCommands.exists(a => a.getText.equals("--image")) && editedCommands.exists(a => a.getText.equals("--image-random"))) {
       throw new IllegalStateException("There are more than one command to import image.")
     }
     if (editedCommands.exists(a => a.getText.equals("--image"))) {
-      sorted.append(editedCommands.find(a => a.getText.equals("--image")).get)
+      sorted = sorted.appended(editedCommands.find(a => a.getText.equals("--image")).get)
       editedCommands = editedCommands.dropWhile(a => a.getText.equals("--image"))
     } else if (editedCommands.exists(a => a.getText.equals("--image-random"))) {
-      sorted.append(editedCommands.find(a => a.getText.equals("--image-random")).get)
+      sorted = sorted.appended(editedCommands.find(a => a.getText.equals("--image-random")).get)
       editedCommands = editedCommands.dropWhile(a => a.getText.equals("--image-random"))
     } else {
       throw new IllegalStateException("There is no command --image or --image-random to import any image.")
@@ -111,17 +109,17 @@ class ConsoleWorker extends Worker {
     //add table and filters
     for (command <- editedCommands) {
       if (command.getText != "--output-console" && command.getText != "--output-file") {
-        sorted.append(command)
+        sorted = sorted.appended(command)
         editedCommands = editedCommands.dropWhile(a => a.getText.equals(command.getText))
       }
     }
 
     //add own command(flag - time to convert) --convert
-    sorted.append(Argument("--convert", None))
+    sorted = sorted.appended(Argument("--convert", None))
 
     //add exports
     for (command <- editedCommands) {
-      sorted.append(command)
+      sorted = sorted.appended(command)
     }
 
     sorted

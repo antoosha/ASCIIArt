@@ -6,6 +6,6 @@ object Main {
 
   def main(args: Array[String]): Unit = {
 
-    worker.work(args.toList)
+    worker.work(args.toSeq)
   }
 }

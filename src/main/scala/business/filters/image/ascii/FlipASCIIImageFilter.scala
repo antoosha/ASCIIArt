@@ -5,28 +5,26 @@ import models.grids.ASCIIGrid
 import models.images.ASCIIImage
 import models.pixels.ASCIIPixel
 
-import scala.collection.mutable.ListBuffer
-
 class FlipASCIIImageFilter(private val axis: String) extends ImageFilter[ASCIIImage] {
 
   override def apply(image: ASCIIImage): ASCIIImage = {
 
-    val flippedGrid = ListBuffer[ListBuffer[ASCIIPixel]]()
+    var flippedGrid = Seq[Seq[ASCIIPixel]]()
     if (axis.toLowerCase() == "x") {
       for (y <- (image.getHeight - 1) to 0 by -1) {
-        val flippedRow = ListBuffer[ASCIIPixel]()
+        var flippedRow = Seq[ASCIIPixel]()
         for (x <- 0 until image.getWidth) {
-          flippedRow.append(image.getPixel(x, y))
+          flippedRow = flippedRow.appended(image.getPixel(x, y))
         }
-        flippedGrid.append(flippedRow)
+        flippedGrid = flippedGrid.appended(flippedRow)
       }
     } else if (axis.toLowerCase() == "y") {
       for (y <- 0 until image.getHeight) {
-        val flippedRow = ListBuffer[ASCIIPixel]()
+        var flippedRow = Seq[ASCIIPixel]()
         for (x <- (image.getWidth - 1) to 0 by -1) {
-          flippedRow.append(image.getPixel(x, y))
+          flippedRow = flippedRow.appended(image.getPixel(x, y))
         }
-        flippedGrid.append(flippedRow)
+        flippedGrid = flippedGrid.appended(flippedRow)
       }
     } else {
       throw new IllegalStateException(s"There is no possibility to flip by '$axis', only 'x' and 'y' supported.")
