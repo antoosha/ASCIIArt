@@ -3,7 +3,12 @@ package models.grids
 import models.pixels.RGBPixel
 
 case class RGBGrid(private val rgbGrid: Seq[Seq[RGBPixel]]) extends PixelGrid[RGBPixel] {
+
   override def getElement(x: Int, y: Int): RGBPixel = {
+
+    if (x < 0 || x > getWidth || y < 0 || y > getHeight) {
+      throw new IllegalStateException(s"Index is out of grid borders. Grid borders: ${this.getHeight}x${this.getWidth}")
+    }
     rgbGrid(y)(x)
   }
 

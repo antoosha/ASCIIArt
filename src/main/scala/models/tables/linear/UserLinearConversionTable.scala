@@ -18,7 +18,7 @@ class UserLinearConversionTable extends LinearConversionTable[String, Char] {
 
   override def getValue(idx: Int): Char = {
 
-    if (idx >= conversionTable.length) {
+    if (idx < 0 || idx >= conversionTable.length) {
       throw new IllegalStateException("Index of the value in conversion table is out of bound.")
     }
     conversionTable(idx)
