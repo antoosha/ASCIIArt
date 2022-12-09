@@ -5,11 +5,11 @@ import models.grids.ASCIIGrid
 import models.images.{ASCIIImage, RGBImage}
 import models.pixels.{ASCIIPixel, RGBPixel}
 import models.tables.ConversionTable
-import models.tables.linear.PaulBrokesLinearConversionTable
+import models.tables.linear.PaulBourkesLinearConversionTable
 
 import scala.collection.mutable.ListBuffer
 
-case class RGBToASCIIImageConverter(private var convTable: ConversionTable[String, Char] = PaulBrokesLinearConversionTable()) extends ImageConverter[RGBImage, ASCIIImage] {
+case class RGBToASCIIImageConverter(private var convTable: ConversionTable[String, Char] = PaulBourkesLinearConversionTable()) extends ImageConverter[RGBImage, ASCIIImage] {
 
   var filters: ListBuffer[ImageFilter[ASCIIImage]] = ListBuffer()
 

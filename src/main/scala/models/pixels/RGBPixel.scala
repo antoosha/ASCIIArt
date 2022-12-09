@@ -1,6 +1,7 @@
 package models.pixels
 
 case class RGBPixel() extends Pixel {
+
   private var r: Int = -1
   private var g: Int = -1
   private var b: Int = -1

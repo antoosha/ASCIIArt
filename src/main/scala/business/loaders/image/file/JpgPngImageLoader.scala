@@ -1,6 +1,5 @@
 package business.loaders.image.file
 
-import business.loaders.image.ImageLoader
 import models.grids.RGBGrid
 import models.images.RGBImage
 import models.pixels.RGBPixel
@@ -10,7 +9,7 @@ import java.io.File
 import javax.imageio.ImageIO
 import scala.collection.mutable.ListBuffer
 
-class PNGImageLoader extends ImageLoader[String, RGBImage] {
+class JpgPngImageLoader extends FileImageLoader[String, RGBImage] {
 
   override def load(path: String): RGBImage = {
 

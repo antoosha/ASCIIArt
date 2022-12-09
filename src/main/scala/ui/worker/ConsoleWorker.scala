@@ -5,9 +5,9 @@ import business.exporters.image.console.ConsoleASCIIImageExporter
 import business.exporters.image.file.TxtFileASCIIImageExporter
 import business.filters.image.ascii.{BrightnessASCIIImageFilter, FlipASCIIImageFilter, InvertASCIIImageFilter}
 import business.loaders.image.RandomImageLoader
-import business.loaders.image.file.{JPGImageLoader, PNGImageLoader}
+import business.loaders.image.file.JpgPngImageLoader
 import models.Argument
-import models.images.RGBImage
+import models.images.{ASCIIImage, RGBImage}
 import models.tables.linear.UserLinearConversionTable
 import models.tables.nonlinear.SimpleNonLinearConversionTable
 import ui.parser.{ConsoleParser, Parser}
@@ -17,41 +17,37 @@ import scala.collection.mutable.ListBuffer
 class ConsoleWorker extends Worker {
 
   private val parser: Parser[List[String], ListBuffer[Argument]] = new ConsoleParser
-  private val jpgImageLoader: JPGImageLoader = new JPGImageLoader()
-  private val pngImageLoader: PNGImageLoader = new PNGImageLoader()
+  private val imageLoader: JpgPngImageLoader = new JpgPngImageLoader()
   private val randomImageLoader: RandomImageLoader = new RandomImageLoader()
   private val consoleASCIIImageExporter: ConsoleASCIIImageExporter = new ConsoleASCIIImageExporter
   private val txtFileASCIIImageExporter: TxtFileASCIIImageExporter = new TxtFileASCIIImageExporter
   private val converter: RGBToASCIIImageConverter = RGBToASCIIImageConverter()
 
-
   override def work(args: List[String]): Unit = {
 
-    if ("run" != args.head) {
-      throw new IllegalStateException("First argument has to be command \"run\" to start the app.")
-    }
     resolveCommands(sortCommands(parser.parse(args)))
   }
 
   private def resolveCommands(commands: ListBuffer[Argument]): Unit = {
 
     var loadedImage: Option[RGBImage] = None
+    var convertedImage: Option[ASCIIImage] = None
 
     for (command <- commands) {
       command.getText match {
         case "--image" => {
           if (command.getValue.get.endsWith(".jpg") || command.getValue.get.endsWith(".jpeg")) {
-            loadedImage = Some(jpgImageLoader.load(command.getValue.get))
+            loadedImage = Some(imageLoader.load(command.getValue.get))
           }
           else if (command.getValue.get.contains(".png")) {
-            loadedImage = Some(pngImageLoader.load(command.getValue.get))
+            loadedImage = Some(imageLoader.load(command.getValue.get))
           } else {
             throw new IllegalStateException(s"It is not possible to load file ${command.getText} because of it's format.")
           }
         }
         case "--output-file" => {
           if (command.getValue.get.endsWith(".txt")) {
-            txtFileASCIIImageExporter.export(converter.convert(loadedImage.get), command.getValue.get)
+            txtFileASCIIImageExporter.export(convertedImage.get, command.getValue.get)
           } else {
             throw new IllegalStateException(s"It is not possible to export to file ${command.getText} because of it's format. "
               + s"Only .txt format is possible.")
@@ -71,7 +67,7 @@ class ConsoleWorker extends Worker {
         }
         case "--table" => {
           command.getValue.get match {
-            case "linearBrokes" => //is set by default
+            case "linearBourkes" => //is set by default
             case "nonLinearSimple" => converter.setTable(SimpleNonLinearConversionTable())
             case _ => throw new IllegalStateException(s"Table name ${command.getValue.get} does not exist.")
           }
@@ -83,7 +79,10 @@ class ConsoleWorker extends Worker {
           loadedImage = Some(randomImageLoader.load(None))
         }
         case "--output-console" => {
-          consoleASCIIImageExporter.export(converter.convert(loadedImage.get), Console.out)
+          consoleASCIIImageExporter.export(convertedImage.get, Console.out)
+        }
+        case "--convert" => {
+          convertedImage = Some(converter.convert(loadedImage.get))
         }
         case _ => throw new IllegalStateException(s"Something went wrong with ${command.getText} command.")
       }
@@ -97,7 +96,7 @@ class ConsoleWorker extends Worker {
 
     //add imports
     if (editedCommands.exists(a => a.getText.equals("--image")) && editedCommands.exists(a => a.getText.equals("--image-random"))) {
-      throw new IllegalStateException("There are more then one command to import image.")
+      throw new IllegalStateException("There are more than one command to import image.")
     }
     if (editedCommands.exists(a => a.getText.equals("--image"))) {
       sorted.append(editedCommands.find(a => a.getText.equals("--image")).get)
@@ -116,6 +115,9 @@ class ConsoleWorker extends Worker {
         editedCommands = editedCommands.dropWhile(a => a.getText.equals(command.getText))
       }
     }
+
+    //add own command(flag - time to convert) --convert
+    sorted.append(Argument("--convert", None))
 
     //add exports
     for (command <- editedCommands) {

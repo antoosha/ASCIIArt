@@ -1,6 +1,6 @@
 package models.tables.linear
 
-case class PaulBrokesLinearConversionTable() extends LinearConversionTable[String, Char] {
+case class PaulBourkesLinearConversionTable() extends LinearConversionTable[String, Char] {
 
   private final val conversionTable: String = "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\"^`'. "
 

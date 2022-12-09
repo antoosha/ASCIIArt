@@ -4,7 +4,7 @@ import models.images.ASCIIImage
 
 import java.io.{BufferedWriter, File, FileWriter}
 
-class TxtFileASCIIImageExporter extends FileImageExporter[ASCIIImage] {
+class TxtFileASCIIImageExporter extends FileImageExporter[ASCIIImage, String] {
 
   override def export(item: ASCIIImage, out: String): Unit = {
 

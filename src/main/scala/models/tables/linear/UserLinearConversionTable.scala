@@ -6,7 +6,6 @@ case class UserLinearConversionTable(private var conversionTable: String = "") e
 
   override def offset: Int = 0
 
-
   def setConversionTable(conversionTable: String): Unit = {
     this.conversionTable = conversionTable
   }
