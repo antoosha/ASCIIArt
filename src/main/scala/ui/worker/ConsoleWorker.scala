@@ -71,7 +71,7 @@ class ConsoleWorker extends Worker {
           }
         }
         case "--custom-table" => {
-          converter.setTable(UserLinearConversionTable(command.getValue.get))
+          converter.setTable(new UserLinearConversionTable(command.getValue.get))
         }
         case "--image-random" => {
           loadedImage = Some(randomImageLoader.load(None))
@@ -115,7 +115,7 @@ class ConsoleWorker extends Worker {
     }
 
     //add own command(flag - time to convert) --convert
-    sorted = sorted.appended(Argument("--convert", None))
+    sorted = sorted.appended(new Argument("--convert", None))
 
     //add exports
     for (command <- editedCommands) {

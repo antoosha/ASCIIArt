@@ -48,7 +48,7 @@ case class RGBToASCIIImageConverter(private var convTable: ConversionTable[Strin
     } else if (value < 0) {
       value = 0
     }
-    ASCIIPixel(value.toInt)
+    new ASCIIPixel(value.toInt)
   }
 
   private def countValueFromBrightnessForASCIIPixel(asciiPixel: ASCIIPixel): Unit = {

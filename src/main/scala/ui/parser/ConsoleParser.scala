@@ -59,10 +59,10 @@ class ConsoleParser extends Parser[Seq[String], Seq[Argument]] {
     if (idxVal > args.length) {
       throw new IllegalStateException("Parameter " + text + "has to have value.")
     }
-    arguments = arguments.appended(Argument(text, Some(args(idxVal))))
+    arguments = arguments.appended(new Argument(text, Some(args(idxVal))))
   }
 
   private def addArgument(text: String): Unit = {
-    arguments = arguments.appended(Argument(text, None))
+    arguments = arguments.appended(new Argument(text, None))
   }
 }

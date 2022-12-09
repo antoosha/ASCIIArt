@@ -1,12 +1,18 @@
 package models.tables.linear
 
-case class UserLinearConversionTable(private var conversionTable: String = "") extends LinearConversionTable[String, Char] {
+class UserLinearConversionTable extends LinearConversionTable[String, Char] {
+
+  private var conversionTable: String = ""
 
   override def getTableValues: String = conversionTable
 
   override def offset: Int = 0
 
-  def setConversionTable(conversionTable: String): Unit = {
+  def this(conversionTable: String) {
+    this()
+    if (conversionTable.isEmpty) {
+      throw new IllegalArgumentException("Conversion table should not be empty.")
+    }
     this.conversionTable = conversionTable
   }
 

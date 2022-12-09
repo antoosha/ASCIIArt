@@ -20,7 +20,7 @@ class BrightnessASCIIImageFilter(private val value: String) extends ImageFilter[
         else if (newBrightness < 0) {
           newBrightness = 0
         }
-        changedRow = changedRow.appended(ASCIIPixel(newBrightness))
+        changedRow = changedRow.appended(new ASCIIPixel(newBrightness))
       }
       changedGrid = changedGrid.appended(changedRow)
     }

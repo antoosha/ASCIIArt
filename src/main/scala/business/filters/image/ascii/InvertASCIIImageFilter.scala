@@ -13,7 +13,7 @@ class InvertASCIIImageFilter extends ImageFilter[ASCIIImage] {
     for (y <- 0 until image.getHeight) {
       var invertedRow = Seq[ASCIIPixel]()
       for (x <- 0 until image.getWidth) {
-        invertedRow = invertedRow.appended(ASCIIPixel(255 - image.getPixel(x, y).getBrightness))
+        invertedRow = invertedRow.appended(new ASCIIPixel(255 - image.getPixel(x, y).getBrightness))
       }
       invertedGrid = invertedGrid.appended(invertedRow)
     }
