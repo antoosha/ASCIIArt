@@ -22,13 +22,13 @@ class GrayscaleToASCIIImageConverter(private var convTable: ConversionTable[Stri
     ASCIIImage(ASCIIGrid(asciiPixelGrid))
   }
 
-  private def countValueFromBrightnessForASCIIPixel(greyscalePixel: GrayscalePixel): ASCIIPixel = {
+  private def countValueFromBrightnessForASCIIPixel(grayscalePixel: GrayscalePixel): ASCIIPixel = {
 
     var idx: Int = 0
     if (convTable.offset == 0) {
-      idx = ((convTable.getTableValues.length * (greyscalePixel.getBrightness / 256.0)) % convTable.getTableValues.length).toInt
-    } else if (greyscalePixel.getBrightness > convTable.offset) {
-      idx = (((convTable.getTableValues.length - 1) * ((greyscalePixel.getBrightness - convTable.offset) / (256.0 - convTable.offset)))
+      idx = ((convTable.getTableValues.length * (grayscalePixel.getBrightness / 256.0)) % convTable.getTableValues.length).toInt
+    } else if (grayscalePixel.getBrightness > convTable.offset) {
+      idx = (((convTable.getTableValues.length - 1) * ((grayscalePixel.getBrightness - convTable.offset) / (256.0 - convTable.offset)))
         % convTable.getTableValues.length).toInt + 1
     }
 

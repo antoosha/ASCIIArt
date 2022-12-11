@@ -1,6 +1,6 @@
 package ui.worker
 
-trait Worker {
+trait Worker[T] {
 
-  def work(args: Seq[String]): Unit
+  def work(args: Seq[String]): Seq[T]
 }

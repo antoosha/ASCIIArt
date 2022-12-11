@@ -11,17 +11,30 @@ class PaulBourkesLinearConversionTableTest extends FunSuite {
     assert(0.equals(conversionTable.offset))
   }
 
-  test("Get value by correct index from table") {
+  test("Get value by correct index = 0 from table") {
     val conversionTable: PaulBourkesLinearConversionTable = PaulBourkesLinearConversionTable()
-    for (i <- 0 until conversionTable.getTableValues.length by 1) {
-      assert(conversionTable.getTableValues(i).equals(conversionTable.getValue(i)))
-    }
+    assert(conversionTable.getTableValues(0).equals(conversionTable.getValue(0)))
   }
 
-  test("Get value by incorrect index from table") {
+  test("Get value by correct index = 10 from table") {
+    val conversionTable: PaulBourkesLinearConversionTable = PaulBourkesLinearConversionTable()
+    assert(conversionTable.getTableValues(10).equals(conversionTable.getValue(10)))
+  }
+
+  test("Get value by correct index = 68(last one) from table") {
+    val conversionTable: PaulBourkesLinearConversionTable = PaulBourkesLinearConversionTable()
+    assert(conversionTable.getTableValues(68).equals(conversionTable.getValue(68)))
+  }
+
+  test("Get value from table by incorrect index > length of the table") {
     val conversionTable: PaulBourkesLinearConversionTable = PaulBourkesLinearConversionTable()
     val tableValuesLength: Int = conversionTable.getTableValues.length
     assertThrows[IllegalStateException](conversionTable.getValue(tableValuesLength))
+  }
+
+  test("Get value from table by incorrect index < 0") {
+    val conversionTable: PaulBourkesLinearConversionTable = PaulBourkesLinearConversionTable()
+    val tableValuesLength: Int = conversionTable.getTableValues.length
     assertThrows[IllegalStateException](conversionTable.getValue(-1))
   }
 }

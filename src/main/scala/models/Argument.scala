@@ -1,6 +1,6 @@
 package models
 
-class Argument {
+case class Argument() {
 
   private var text: String = ""
   private var value: Option[String] = None

@@ -44,7 +44,7 @@ class ConsoleParserTest extends FunSuite {
     val parsedInput: Seq[Argument] = parser.parse(arguments)
     assert(resultArguments.length.equals(parsedInput.length))
     for (i <- resultArguments.indices) {
-      resultArguments(i).equals(parsedInput(i))
+      assert(resultArguments(i).equals(parsedInput(i)))
     }
   }
 
@@ -61,7 +61,7 @@ class ConsoleParserTest extends FunSuite {
     val parsedInput: Seq[Argument] = parser.parse(arguments)
     assert(resultArguments.length.equals(parsedInput.length))
     for (i <- resultArguments.indices) {
-      resultArguments(i).equals(parsedInput(i))
+      assert(resultArguments(i).equals(parsedInput(i)))
     }
   }
 
@@ -80,7 +80,7 @@ class ConsoleParserTest extends FunSuite {
     val parsedInput: Seq[Argument] = parser.parse(arguments)
     assert(resultArguments.length.equals(parsedInput.length))
     for (i <- resultArguments.indices) {
-      resultArguments(i).equals(parsedInput(i))
+      assert(resultArguments(i).equals(parsedInput(i)))
     }
   }
 
@@ -106,7 +106,7 @@ class ConsoleParserTest extends FunSuite {
     val parsedInput: Seq[Argument] = parser.parse(arguments)
     assert(resultArguments.length.equals(parsedInput.length))
     for (i <- resultArguments.indices) {
-      resultArguments(i).equals(parsedInput(i))
+      assert(resultArguments(i).equals(parsedInput(i)))
     }
   }
 
@@ -127,7 +127,7 @@ class ConsoleParserTest extends FunSuite {
     val parsedInput: Seq[Argument] = parser.parse(arguments)
     assert(resultArguments.length.equals(parsedInput.length))
     for (i <- resultArguments.indices) {
-      resultArguments(i).equals(parsedInput(i))
+      assert(resultArguments(i).equals(parsedInput(i)))
     }
   }
 
@@ -148,7 +148,7 @@ class ConsoleParserTest extends FunSuite {
     val parsedInput: Seq[Argument] = parser.parse(arguments)
     assert(resultArguments.length.equals(parsedInput.length))
     for (i <- resultArguments.indices) {
-      resultArguments(i).equals(parsedInput(i))
+      assert(resultArguments(i).equals(parsedInput(i)))
     }
   }
 
@@ -169,7 +169,7 @@ class ConsoleParserTest extends FunSuite {
     val parsedInput: Seq[Argument] = parser.parse(arguments)
     assert(resultArguments.length.equals(parsedInput.length))
     for (i <- resultArguments.indices) {
-      resultArguments(i).equals(parsedInput(i))
+      assert(resultArguments(i).equals(parsedInput(i)))
     }
   }
 
@@ -179,7 +179,5 @@ class ConsoleParserTest extends FunSuite {
     val parser: ConsoleParser = new ConsoleParser
     assertThrows[IllegalStateException](parser.parse(arguments))
   }
-
-
 }
 

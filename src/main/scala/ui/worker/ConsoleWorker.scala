@@ -1,6 +1,6 @@
 package ui.worker
 
-import business.converters.image.{GrayscaleToASCIIImageConverter, RGBToGreyscaleImageConverter}
+import business.converters.image.{GrayscaleToASCIIImageConverter, RGBToGrayscaleImageConverter}
 import business.exporters.image.console.ConsoleASCIIImageExporter
 import business.exporters.image.file.TxtFileASCIIImageExporter
 import business.filters.image.grayscale.{BrightnessGrayscaleImageFilter, FlipGrayscaleImageFilter, InvertGrayscaleImageFilter}
@@ -12,19 +12,19 @@ import models.tables.nonlinear.SimpleNonLinearConversionTable
 import models.{Argument, Axis}
 import ui.parser.{ConsoleParser, Parser}
 
-class ConsoleWorker extends Worker {
+class ConsoleWorker extends Worker[Argument] {
 
   private val parser: Parser[Seq[String], Seq[Argument]] = new ConsoleParser
   private val randomImageLoader: RandomImageLoader = new RandomImageLoader()
-  private val rgbToGreyscaleImageConverter: RGBToGreyscaleImageConverter = RGBToGreyscaleImageConverter()
+  private val rgbToGrayscaleImageConverter: RGBToGrayscaleImageConverter = RGBToGrayscaleImageConverter()
   private val grayscaleToASCIIImageConverter: GrayscaleToASCIIImageConverter = new GrayscaleToASCIIImageConverter()
 
-  override def work(args: Seq[String]): Unit = {
+  override def work(args: Seq[String]): Seq[Argument] = {
 
     resolveCommands(sortCommands(parser.parse(args)))
   }
 
-  private def resolveCommands(commands: Seq[Argument]): Unit = {
+  private def resolveCommands(commands: Seq[Argument]): Seq[Argument] = {
 
     var loadedImage: Option[RGBImage] = None
     var convertedImage: Option[ASCIIImage] = None
@@ -53,13 +53,13 @@ class ConsoleWorker extends Worker {
         }
         case "--brightness" => {
           val brightnessFilter: BrightnessGrayscaleImageFilter = new BrightnessGrayscaleImageFilter(command.getValue.get)
-          rgbToGreyscaleImageConverter.addFilter(brightnessFilter)
+          rgbToGrayscaleImageConverter.addFilter(brightnessFilter)
         }
         case "--flip" => {
           if (command.getValue.get.toLowerCase() == Axis.X.toString) {
-            rgbToGreyscaleImageConverter.addFilter(new FlipGrayscaleImageFilter(Axis.X))
+            rgbToGrayscaleImageConverter.addFilter(new FlipGrayscaleImageFilter(Axis.X))
           } else if (command.getValue.get.toLowerCase() == Axis.Y.toString) {
-            rgbToGreyscaleImageConverter.addFilter(new FlipGrayscaleImageFilter(Axis.Y))
+            rgbToGrayscaleImageConverter.addFilter(new FlipGrayscaleImageFilter(Axis.Y))
           }
           else {
             throw new IllegalStateException(s"There is no known axis as: ${command.getValue.get}. Only X and Y is possible. ")
@@ -67,7 +67,7 @@ class ConsoleWorker extends Worker {
         }
         case "--invert" => {
           val invertFilter: InvertGrayscaleImageFilter = new InvertGrayscaleImageFilter()
-          rgbToGreyscaleImageConverter.addFilter(invertFilter)
+          rgbToGrayscaleImageConverter.addFilter(invertFilter)
         }
         case "--table" => {
           command.getValue.get match {
@@ -86,12 +86,14 @@ class ConsoleWorker extends Worker {
           new ConsoleASCIIImageExporter(Console.out).export(convertedImage.get)
         }
         case "--convert" => {
-          val greyscaleImage: GrayscaleImage = rgbToGreyscaleImageConverter.convert(loadedImage.get)
-          convertedImage = Some(grayscaleToASCIIImageConverter.convert(greyscaleImage))
+          val grayscaleImage: GrayscaleImage = rgbToGrayscaleImageConverter.convert(loadedImage.get)
+          convertedImage = Some(grayscaleToASCIIImageConverter.convert(grayscaleImage))
         }
         case _ => throw new IllegalStateException(s"Something went wrong with ${command.getText} command.")
       }
     }
+
+    commands
   }
 
   private def sortCommands(commands: Seq[Argument]): Seq[Argument] = {

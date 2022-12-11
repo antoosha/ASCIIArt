@@ -1,8 +1,8 @@
-import ui.worker.{ConsoleWorker, Worker}
+import ui.worker.ConsoleWorker
 
 object Main {
 
-  val worker: Worker = new ConsoleWorker
+  val worker: ConsoleWorker = new ConsoleWorker
 
   def main(args: Array[String]): Unit = {
 
