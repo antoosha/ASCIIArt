@@ -1,7 +1,7 @@
 package business.exporters
 
-trait Exporter[I, P] {
+trait Exporter[T] {
 
-  def export(item: I, out: P): Unit
+  def export(item: T): Unit
 
 }

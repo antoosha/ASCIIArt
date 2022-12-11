@@ -1,5 +1,6 @@
-package models.grids
+package models.grids.pixel
 
+import models.grids.PixelGrid
 import models.pixels.RGBPixel
 
 case class RGBGrid(private val rgbGrid: Seq[Seq[RGBPixel]]) extends PixelGrid[RGBPixel] {

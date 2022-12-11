@@ -1,5 +1,6 @@
-package models.grids
+package models.grids.pixel
 
+import models.grids.PixelGrid
 import models.pixels.ASCIIPixel
 
 case class ASCIIGrid(private val asciiGrid: Seq[Seq[ASCIIPixel]]) extends PixelGrid[ASCIIPixel] {

@@ -1,6 +1,6 @@
 package business.loaders.image.file
 
-import models.grids.RGBGrid
+import models.grids.pixel.RGBGrid
 import models.images.RGBImage
 import models.pixels.RGBPixel
 
@@ -8,9 +8,9 @@ import java.awt.Color
 import java.io.File
 import javax.imageio.ImageIO
 
-class JpgPngImageLoader extends FileImageLoader[String, RGBImage] {
+class ImageIOFileImageLoader(path: String) extends FileImageLoader[RGBImage]() {
 
-  override def load(path: String): RGBImage = {
+  override def load(): RGBImage = {
 
     try {
       val image = ImageIO.read(new File(path))

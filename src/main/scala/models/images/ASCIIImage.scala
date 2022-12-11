@@ -1,6 +1,6 @@
 package models.images
 
-import models.grids.ASCIIGrid
+import models.grids.pixel.ASCIIGrid
 import models.pixels.ASCIIPixel
 
 case class ASCIIImage(private val asciiGrid: ASCIIGrid) extends Image {

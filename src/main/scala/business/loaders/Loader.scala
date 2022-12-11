@@ -1,6 +1,6 @@
 package business.loaders
 
-trait Loader[P, R] {
+trait Loader[R] {
 
-  def load(path: P): R
+  def load(): R
 }

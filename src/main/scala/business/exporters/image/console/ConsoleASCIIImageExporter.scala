@@ -5,14 +5,14 @@ import models.images.ASCIIImage
 
 import java.io.PrintStream
 
-class ConsoleASCIIImageExporter extends ImageExporter[ASCIIImage, PrintStream] {
+class ConsoleASCIIImageExporter(os: PrintStream) extends ImageExporter[ASCIIImage] {
 
-  override def export(item: ASCIIImage, out: PrintStream): Unit = {
+  override def export(item: ASCIIImage): Unit = {
     for (y <- 0 until item.getHeight) {
       for (x <- 0 until item.getWidth) {
-        out.print(item.getPixel(x, y).getPixel)
+        os.print(item.getPixel(x, y).getPixel)
       }
-      out.println()
+      os.println()
     }
   }
 }

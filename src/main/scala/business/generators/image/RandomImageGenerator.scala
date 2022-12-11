@@ -1,6 +1,6 @@
 package business.generators.image
 
-import models.grids.RGBGrid
+import models.grids.pixel.RGBGrid
 import models.images.RGBImage
 import models.pixels.RGBPixel
 

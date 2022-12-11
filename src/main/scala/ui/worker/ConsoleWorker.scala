@@ -1,25 +1,23 @@
 package ui.worker
 
-import business.converters.image.RGBToASCIIImageConverter
+import business.converters.image.{GrayscaleToASCIIImageConverter, RGBToGreyscaleImageConverter}
 import business.exporters.image.console.ConsoleASCIIImageExporter
 import business.exporters.image.file.TxtFileASCIIImageExporter
-import business.filters.image.ascii.{BrightnessASCIIImageFilter, FlipASCIIImageFilter, InvertASCIIImageFilter}
+import business.filters.image.grayscale.{BrightnessGrayscaleImageFilter, FlipGrayscaleImageFilter, InvertGrayscaleImageFilter}
 import business.loaders.image.RandomImageLoader
-import business.loaders.image.file.JpgPngImageLoader
-import models.Argument
-import models.images.{ASCIIImage, RGBImage}
+import business.loaders.image.file.{JpgImageLoader, PngImageLoader}
+import models.images.{ASCIIImage, GrayscaleImage, RGBImage}
 import models.tables.linear.UserLinearConversionTable
 import models.tables.nonlinear.SimpleNonLinearConversionTable
+import models.{Argument, Axis}
 import ui.parser.{ConsoleParser, Parser}
 
 class ConsoleWorker extends Worker {
 
   private val parser: Parser[Seq[String], Seq[Argument]] = new ConsoleParser
-  private val imageLoader: JpgPngImageLoader = new JpgPngImageLoader()
   private val randomImageLoader: RandomImageLoader = new RandomImageLoader()
-  private val consoleASCIIImageExporter: ConsoleASCIIImageExporter = new ConsoleASCIIImageExporter
-  private val txtFileASCIIImageExporter: TxtFileASCIIImageExporter = new TxtFileASCIIImageExporter
-  private val converter: RGBToASCIIImageConverter = RGBToASCIIImageConverter()
+  private val rgbToGreyscaleImageConverter: RGBToGreyscaleImageConverter = RGBToGreyscaleImageConverter()
+  private val grayscaleToASCIIImageConverter: GrayscaleToASCIIImageConverter = new GrayscaleToASCIIImageConverter()
 
   override def work(args: Seq[String]): Unit = {
 
@@ -35,52 +33,61 @@ class ConsoleWorker extends Worker {
       command.getText match {
         case "--image" => {
           if (command.getValue.get.endsWith(".jpg") || command.getValue.get.endsWith(".jpeg")) {
-            loadedImage = Some(imageLoader.load(command.getValue.get))
+            val jpgImageLoader: JpgImageLoader = new JpgImageLoader(command.getValue.get)
+            loadedImage = Some(jpgImageLoader.load())
           }
           else if (command.getValue.get.contains(".png")) {
-            loadedImage = Some(imageLoader.load(command.getValue.get))
+            val pngImageLoader: PngImageLoader = new PngImageLoader(command.getValue.get)
+            loadedImage = Some(pngImageLoader.load())
           } else {
             throw new IllegalStateException(s"It is not possible to load file ${command.getText} because of it's format.")
           }
         }
         case "--output-file" => {
           if (command.getValue.get.endsWith(".txt")) {
-            txtFileASCIIImageExporter.export(convertedImage.get, command.getValue.get)
+            new TxtFileASCIIImageExporter(command.getValue.get).export(convertedImage.get)
           } else {
             throw new IllegalStateException(s"It is not possible to export to file ${command.getText} because of it's format. "
               + s"Only .txt format is possible.")
           }
         }
         case "--brightness" => {
-          val brightnessFilter: BrightnessASCIIImageFilter = new BrightnessASCIIImageFilter(command.getValue.get)
-          converter.addFilter(brightnessFilter)
+          val brightnessFilter: BrightnessGrayscaleImageFilter = new BrightnessGrayscaleImageFilter(command.getValue.get)
+          rgbToGreyscaleImageConverter.addFilter(brightnessFilter)
         }
         case "--flip" => {
-          val flipFilter: FlipASCIIImageFilter = new FlipASCIIImageFilter(command.getValue.get)
-          converter.addFilter(flipFilter)
+          if (command.getValue.get.toLowerCase() == Axis.X.toString) {
+            rgbToGreyscaleImageConverter.addFilter(new FlipGrayscaleImageFilter(Axis.X))
+          } else if (command.getValue.get.toLowerCase() == Axis.Y.toString) {
+            rgbToGreyscaleImageConverter.addFilter(new FlipGrayscaleImageFilter(Axis.Y))
+          }
+          else {
+            throw new IllegalStateException(s"There is no known axis as: ${command.getValue.get}. Only X and Y is possible. ")
+          }
         }
         case "--invert" => {
-          val invertFilter: InvertASCIIImageFilter = new InvertASCIIImageFilter()
-          converter.addFilter(invertFilter)
+          val invertFilter: InvertGrayscaleImageFilter = new InvertGrayscaleImageFilter()
+          rgbToGreyscaleImageConverter.addFilter(invertFilter)
         }
         case "--table" => {
           command.getValue.get match {
             case "linearBourkes" => //is set by default
-            case "nonLinearSimple" => converter.setTable(SimpleNonLinearConversionTable())
+            case "nonLinearSimple" => grayscaleToASCIIImageConverter.setTable(SimpleNonLinearConversionTable())
             case _ => throw new IllegalStateException(s"Table name ${command.getValue.get} does not exist.")
           }
         }
         case "--custom-table" => {
-          converter.setTable(new UserLinearConversionTable(command.getValue.get))
+          grayscaleToASCIIImageConverter.setTable(new UserLinearConversionTable(command.getValue.get))
         }
         case "--image-random" => {
-          loadedImage = Some(randomImageLoader.load(None))
+          loadedImage = Some(randomImageLoader.load())
         }
         case "--output-console" => {
-          consoleASCIIImageExporter.export(convertedImage.get, Console.out)
+          new ConsoleASCIIImageExporter(Console.out).export(convertedImage.get)
         }
         case "--convert" => {
-          convertedImage = Some(converter.convert(loadedImage.get))
+          val greyscaleImage: GrayscaleImage = rgbToGreyscaleImageConverter.convert(loadedImage.get)
+          convertedImage = Some(grayscaleToASCIIImageConverter.convert(greyscaleImage))
         }
         case _ => throw new IllegalStateException(s"Something went wrong with ${command.getText} command.")
       }

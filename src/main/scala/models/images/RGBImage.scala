@@ -1,6 +1,6 @@
 package models.images
 
-import models.grids.RGBGrid
+import models.grids.pixel.RGBGrid
 import models.pixels.RGBPixel
 
 case class RGBImage(private val rgbGrid: RGBGrid) extends Image {
