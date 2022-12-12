@@ -8,7 +8,7 @@ class RandomImageGenerator() extends ImageGenerator {
 
   override def generate(): RGBImage = {
     val from: Int = 200
-    val to: Int = 1600
+    val to: Int = 801
 
     val rg = scala.util.Random
     val width = rg.between(from, to)
