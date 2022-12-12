@@ -5,9 +5,19 @@ import models.grids.pixel.GrayscaleGrid
 import models.images.GrayscaleImage
 import models.pixels.GrayscalePixel
 
-
+/**
+ * Represents brightness filtering
+ *
+ * @param value
+ */
 class BrightnessGrayscaleImageFilter(private val value: String) extends ImageFilter[GrayscaleImage] {
 
+  /**
+   * Applies brightness filter
+   *
+   * @param image for apply filter
+   * @return image after applying filter
+   */
   override def apply(image: GrayscaleImage): GrayscaleImage = {
 
     var changedGrid = Seq[Seq[GrayscalePixel]]()

@@ -8,8 +8,18 @@ import java.awt.Color
 import java.io.File
 import javax.imageio.ImageIO
 
+/**
+ * Represents loading of an image from file using ImageIO library
+ *
+ * @param path from what file to load
+ */
 class ImageIOFileImageLoader(path: String) extends FileImageLoader[RGBImage]() {
 
+  /**
+   * Loads an image from file
+   *
+   * @return loaded item
+   */
   override def load(): RGBImage = {
 
     try {

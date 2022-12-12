@@ -6,8 +6,19 @@ import models.pixels.{ASCIIPixel, GrayscalePixel}
 import models.tables.ConversionTable
 import models.tables.linear.PaulBourkesLinearConversionTable
 
+/**
+ * Represents conversion from GrayscaleImage to ASCIIImage using conversion table
+ *
+ * @param convTable
+ */
 class GrayscaleToASCIIImageConverter(private var convTable: ConversionTable[String, Char] = PaulBourkesLinearConversionTable()) extends ImageConverter[GrayscaleImage, ASCIIImage] {
 
+  /**
+   * Converts GrayscaleImage to ASCIIImage
+   *
+   * @param item to convert
+   * @return converted item
+   */
   override def convert(item: GrayscaleImage): ASCIIImage = {
 
     var asciiPixelGrid: Seq[Seq[ASCIIPixel]] = Seq[Seq[ASCIIPixel]]()
@@ -22,6 +33,13 @@ class GrayscaleToASCIIImageConverter(private var convTable: ConversionTable[Stri
     ASCIIImage(ASCIIGrid(asciiPixelGrid))
   }
 
+  /**
+   * Converts GrayscalePixel to ASCIIPixel
+   * Counts ascii character from brightness value using formula
+   *
+   * @param grayscalePixel pixel
+   * @return
+   */
   private def countValueFromBrightnessForASCIIPixel(grayscalePixel: GrayscalePixel): ASCIIPixel = {
 
     var idx: Int = 0
@@ -35,6 +53,11 @@ class GrayscaleToASCIIImageConverter(private var convTable: ConversionTable[Stri
     ASCIIPixel(convTable.getValue(idx))
   }
 
+  /**
+   * Sets defined table
+   *
+   * @param convTable is defined table to set
+   */
   def setTable(convTable: ConversionTable[String, Char]): Unit = {
     this.convTable = convTable
   }

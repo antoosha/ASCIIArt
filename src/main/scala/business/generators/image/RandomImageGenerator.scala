@@ -4,8 +4,16 @@ import models.grids.pixel.RGBGrid
 import models.images.RGBImage
 import models.pixels.RGBPixel
 
+/**
+ * Represents random image generator
+ */
 class RandomImageGenerator() extends ImageGenerator {
 
+  /**
+   * Generates random image with randomly defined size. Size could be between 200 and 800 pixels.
+   *
+   * @return generated item
+   */
   override def generate(): RGBImage = {
     val from: Int = 200
     val to: Int = 801

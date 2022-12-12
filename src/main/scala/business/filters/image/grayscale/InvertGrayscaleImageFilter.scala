@@ -5,8 +5,17 @@ import models.grids.pixel.GrayscaleGrid
 import models.images.GrayscaleImage
 import models.pixels.GrayscalePixel
 
+/**
+ * Represents inversion filter
+ */
 class InvertGrayscaleImageFilter extends ImageFilter[GrayscaleImage] {
 
+  /**
+   * Applies inversion filter for an image
+   *
+   * @param image for apply filter
+   * @return image after applying filter
+   */
   override def apply(image: GrayscaleImage): GrayscaleImage = {
 
     var invertedGrid = Seq[Seq[GrayscalePixel]]()

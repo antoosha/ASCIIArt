@@ -6,8 +6,19 @@ import models.grids.pixel.GrayscaleGrid
 import models.images.GrayscaleImage
 import models.pixels.GrayscalePixel
 
+/**
+ * Represents flipping filter
+ *
+ * @param axis by that to flip. Could be x or y
+ */
 class FlipGrayscaleImageFilter(private val axis: Axis) extends ImageFilter[GrayscaleImage] {
 
+  /**
+   * Applies flipping for an image
+   *
+   * @param image for apply filter
+   * @return image after applying filter
+   */
   override def apply(image: GrayscaleImage): GrayscaleImage = {
     axis match {
       case X => GrayscaleImage(flipByAxisX(image))
@@ -15,6 +26,12 @@ class FlipGrayscaleImageFilter(private val axis: Axis) extends ImageFilter[Grays
     }
   }
 
+  /**
+   * Flipps by X axis
+   *
+   * @param image for apply filter
+   * @return image after applying filter
+   */
   private def flipByAxisX(image: GrayscaleImage): GrayscaleGrid = {
 
     var flippedGrid = Seq[Seq[GrayscalePixel]]()
@@ -28,6 +45,12 @@ class FlipGrayscaleImageFilter(private val axis: Axis) extends ImageFilter[Grays
     GrayscaleGrid(flippedGrid)
   }
 
+  /**
+   * Flipps by Y axis
+   *
+   * @param image for apply filter
+   * @return image after applying filter
+   */
   private def flipByAxisY(image: GrayscaleImage): GrayscaleGrid = {
 
     var flippedGrid = Seq[Seq[GrayscalePixel]]()
