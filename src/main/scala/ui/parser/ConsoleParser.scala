@@ -2,10 +2,19 @@ package ui.parser
 
 import models.Argument
 
+/**
+ * Represents parsing of console arguments
+ */
 class ConsoleParser extends Parser[Seq[String], Seq[Argument]] {
 
   private var arguments: Seq[Argument] = Seq()
 
+  /**
+   * Parses console arguments
+   *
+   * @param args to parse
+   * @return parsed arguments
+   */
   override def parse(args: Seq[String]): Seq[Argument] = {
 
     if (args.isEmpty) {

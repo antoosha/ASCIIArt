@@ -1,9 +1,17 @@
 package models.pixels
 
+/**
+ * Concrete data model of GrayscalePixel
+ */
 class GrayscalePixel extends Pixel {
 
   private var brightness = 0
 
+  /**
+   * Constructor for GrayscalePixel with checked required parameter
+   *
+   * @param brightness grayscale value
+   */
   def this(brightness: Int) {
 
     this()

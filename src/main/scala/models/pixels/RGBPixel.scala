@@ -1,11 +1,21 @@
 package models.pixels
 
+/**
+ * Concrete data model of RGBPixel
+ */
 class RGBPixel extends Pixel {
 
   private var r: Int = -1
   private var g: Int = -1
   private var b: Int = -1
 
+  /**
+   * Constructor of RGBPixel with required checked values
+   *
+   * @param r
+   * @param g
+   * @param b
+   */
   def this(r: Int, g: Int, b: Int) {
     this()
     if (r < 0 || r > 255) {

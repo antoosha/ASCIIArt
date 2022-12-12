@@ -1,5 +1,8 @@
 package models
 
+/**
+ * Represents Axis of coordinate system
+ */
 object Axis extends Enumeration {
 
   type Axis = Value

@@ -12,6 +12,9 @@ import models.tables.nonlinear.SimpleNonLinearConversionTable
 import models.{Argument, Axis}
 import ui.parser.{ConsoleParser, Parser}
 
+/**
+ * Represents resolving console input commands
+ */
 class ConsoleWorker extends Worker[Argument] {
 
   private val parser: Parser[Seq[String], Seq[Argument]] = new ConsoleParser
@@ -19,11 +22,23 @@ class ConsoleWorker extends Worker[Argument] {
   private val rgbToGrayscaleImageConverter: RGBToGrayscaleImageConverter = RGBToGrayscaleImageConverter()
   private val grayscaleToASCIIImageConverter: GrayscaleToASCIIImageConverter = new GrayscaleToASCIIImageConverter()
 
+  /**
+   * Calls parser, sorter and resolver
+   *
+   * @param args to resolve
+   * @return resolved commands
+   */
   override def work(args: Seq[String]): Seq[Argument] = {
 
     resolveCommands(sortCommands(parser.parse(args)))
   }
 
+  /**
+   * Resolves commands from input, calls services
+   *
+   * @param commands that were successfully resolved
+   * @return
+   */
   private def resolveCommands(commands: Seq[Argument]): Seq[Argument] = {
 
     var loadedImage: Option[RGBImage] = None
@@ -96,6 +111,12 @@ class ConsoleWorker extends Worker[Argument] {
     commands
   }
 
+  /**
+   * Sorts input commands to correct order
+   *
+   * @param commands correctly sorted
+   * @return
+   */
   private def sortCommands(commands: Seq[Argument]): Seq[Argument] = {
 
     var editedCommands = commands
